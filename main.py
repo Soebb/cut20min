@@ -29,7 +29,7 @@ async def start(bot, m):
     keyboard.append(refresh_button)
     try:
         for file in glob.glob('C:/dlmacvin/1aa/*'):
-            
+            if file.endswith(('.ts', '.mp4', '.mkv')):
                 keyboard.append(
                     [
                         InlineKeyboardButton(
@@ -38,6 +38,9 @@ async def start(bot, m):
                         )
                     ]
                 )
+    except Exception as e:
+        print(e)
+        return
     keyboard.append(refresh_button)
     #await bot.send_message(chat_id=id, text="Which one?", reply_markup=InlineKeyboardMarkup(keyboard))
     await m.reply_text(text="Which one?", reply_markup=InlineKeyboardMarkup(keyboard))
@@ -51,14 +54,15 @@ async def callback(bot, update):
         keyboard.append(refresh_button)
         try:
             for file in glob.glob('C:/dlmacvin/1aa/*'):
-                keyboard.append(
-                    [
-                        InlineKeyboardButton(
-                            text=file.rsplit('/', 1)[1].replace('1aa\\', ''),
-                            callback_data=file.rsplit('/', 1)[1].replace('1aa\\', '')
-                        )
-                    ]
-                )
+                if file.endswith(('.ts', '.mp4', '.mkv')):
+                    keyboard.append(
+                        [
+                            InlineKeyboardButton(
+                                text=file.rsplit('/', 1)[1].replace('1aa\\', ''),
+                                callback_data=file.rsplit('/', 1)[1].replace('1aa\\', '')
+                            )
+                        ]
+                    )
         except Exception as e:
             print(e)
             return
