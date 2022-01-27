@@ -29,17 +29,15 @@ async def start(bot, m):
     keyboard.append(refresh_button)
     try:
         for file in glob.glob('C:/dlmacvin/1aa/*'):
-            keyboard.append(
-                [
-                    InlineKeyboardButton(
-                        text=file.rsplit('/', 1)[1].replace('1aa\\', ''),
-                        callback_data=file.rsplit('/', 1)[1].replace('1aa\\', '')
-                    )
-                ]
-            )
-    except Exception as e:
-        print(e)
-        return
+            
+                keyboard.append(
+                    [
+                        InlineKeyboardButton(
+                            text=file.rsplit('/', 1)[1].replace('1aa\\', ''),
+                            callback_data=file.rsplit('/', 1)[1].replace('1aa\\', '')
+                        )
+                    ]
+                )
     keyboard.append(refresh_button)
     #await bot.send_message(chat_id=id, text="Which one?", reply_markup=InlineKeyboardMarkup(keyboard))
     await m.reply_text(text="Which one?", reply_markup=InlineKeyboardMarkup(keyboard))
@@ -76,7 +74,7 @@ async def callback(bot, update):
         process_msg = await update.message.reply_text('Processing..')
         ext = '.' + name.rsplit('.', 1)[1]
         out = 'C:/dlmacvin/1aa/videos/'+name
-        os.system(f'''ffmpeg -ss 00:00:00 -i "{input}" -to 00:20:00 -c copy "{out}"''')
+        os.system(f'''ffmpeg -ss 00:00:00 -i "{input}" -to 00:20:00 -c copy -y "{out}"''')
         await process_msg.delete()
         if chatid == 0:
             msg = await update.message.reply_text('Done! ' + out)
