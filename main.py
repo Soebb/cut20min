@@ -27,22 +27,20 @@ refresh_button = [
 msgid = 0
 chatid = 0
 
-@Bot.on_message(filters.command(['resume']) & check_user & filters.private)
+@Bot.on_message(filters.command(['resume']) & filters.private)
 async def edame(client, message):
     win.activate()
     kb.press_and_release('enter')
     await message.reply('resumed.')
 
-@Bot.on_message(filters.command(['stop']) & check_user & filters.private)
+@Bot.on_message(filters.command(['stop']) & filters.private)
 async def estop(client, message):
     win.activate()
     kb.press_and_release('pause')
     await message.reply('stoped. to resume send /resume')
 
-@Bot.on_message(filters.command(['cancel']) & check_user & filters.private)
+@Bot.on_message(filters.command(['cancel']) & filters.private)
 async def kansel(client, message):
-    chat_id = message.from_user.id
-    db.erase(chat_id)
     await message.reply('canceled.')
     exit()
 
