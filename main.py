@@ -1,7 +1,10 @@
 import os, datetime, glob, subprocess, json
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
+import keyboard as kb
+import pygetwindow as gw
 
+win = gw.getActiveWindow()
 
 BOT_TOKEN = " "
 API_ID = " "
@@ -23,6 +26,26 @@ refresh_button = [
 
 msgid = 0
 chatid = 0
+
+@Bot.on_message(filters.command(['resume']) & check_user & filters.private)
+async def edame(client, message):
+    win.activate()
+    kb.press_and_release('enter')
+    await message.reply('resumed.')
+
+@Bot.on_message(filters.command(['stop']) & check_user & filters.private)
+async def estop(client, message):
+    win.activate()
+    kb.press_and_release('pause')
+    await message.reply('stoped. to resume send /resume')
+
+@Bot.on_message(filters.command(['cancel']) & check_user & filters.private)
+async def kansel(client, message):
+    chat_id = message.from_user.id
+    db.erase(chat_id)
+    await message.reply('canceled.')
+    exit()
+
 @Bot.on_message(filters.text & ~filters.regex('/previous'))
 async def start(bot, m):
     keyboard = []
@@ -75,7 +98,7 @@ async def callback(bot, update):
     try:
         name = update.data
         input = 'C:/dlmacvin/1aa/' + name
-        process_msg = await update.message.reply_text('Processing..')
+        process_msg = await update.message.reply_text('Processing..\nFor cancel send /cancel\nFor stop send /stop')
         ext = '.' + name.rsplit('.', 1)[1]
         out = 'C:/dlmacvin/1aa/videos/'+name
         os.system(f'''ffmpeg -ss 00:00:00 -i "{input}" -to 00:20:00 -c copy -y "{out}"''')
